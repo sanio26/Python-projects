@@ -1,0 +1,33 @@
+import re
+
+def mad_libs(input_file, output_file):
+    # Read the input file
+    with open(input_file, 'r') as file:
+        content = file.read()
+
+    # Define the placeholders and their prompts
+    placeholders = ["ADJECTIVE", "NOUN", "ADVERB", "VERB"]
+
+    def replace_placeholder(match):
+        word_type = match.group()
+        article = "an" if word_type[0] in "AEIOU" else "a"
+        user_input = input(f"Enter {article} {word_type.lower()}: ")
+        return user_input
+
+    # Regex pattern to match placeholders
+    pattern = re.compile(r'\b(' + '|'.join(placeholders) + r')\b')
+
+    # Replace placeholders with user input
+    result = pattern.sub(replace_placeholder, content)
+
+    # Print and save result
+    print("\n--- Final Result ---\n")
+    print(result)
+
+    with open(output_file, 'w') as file:
+        file.write(result)
+
+    print(f"\nMad Libs story saved to '{output_file}'.")
+
+# Example usage
+mad_libs('madlibs_input.txt', 'madlibs_output.txt')
