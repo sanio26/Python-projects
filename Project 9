@@ -1,0 +1,83 @@
+
+
+✅ 1. Print the current day of the week
+
+import datetime
+
+today = datetime.date.today()
+print("Today is:", today.strftime("%A"))  # Full weekday name
+
+
+---
+
+✅ 2. Calculate age and time until next birthday
+
+import datetime
+
+def birthday_info():
+    bday_input = input("Enter your birthday (YYYY-MM-DD): ")
+    bday = datetime.datetime.strptime(bday_input, "%Y-%m-%d").date()
+    today = datetime.date.today()
+
+    # Calculate age
+    age = today.year - bday.year
+    if (today.month, today.day) < (bday.month, bday.day):
+        age -= 1
+
+    # Next birthday
+    next_birthday = datetime.date(today.year, bday.month, bday.day)
+    if next_birthday < today:
+        next_birthday = datetime.date(today.year + 1, bday.month, bday.day)
+
+    time_to_next_bday = datetime.datetime.combine(next_birthday, datetime.time.min) - datetime.datetime.now()
+
+    print(f"You are {age} years old.")
+    print("Time until next birthday:")
+    print(f"  Days   : {time_to_next_bday.days}")
+    print(f"  Hours  : {time_to_next_bday.seconds // 3600}")
+    print(f"  Minutes: {(time_to_next_bday.seconds % 3600) // 60}")
+    print(f"  Seconds: {time_to_next_bday.seconds % 60}")
+
+# birthday_info()
+
+
+---
+
+✅ 3. Find the "Double Day" (when one person is twice as old as the other)
+
+def double_day(b1, b2):
+    # Ensure b1 is the older
+    if b2 < b1:
+        b1, b2 = b2, b1
+
+    delta = b2 - b1
+    double_day = b2 + delta
+    return double_day
+
+# Example usage:
+# Enter birth dates in YYYY-MM-DD format
+b1 = datetime.date(1990, 1, 1)
+b2 = datetime.date(1995, 1, 1)
+print("Double Day is:", double_day(b1, b2))
+
+
+---
+
+✅ 4. Generalized version: n-times older day
+
+def n_times_day(b1, b2, n):
+    # Ensure b1 is the older
+    if b2 < b1:
+        b1, b2 = b2, b1
+        n = 1 / n  # Reverse the ratio
+
+    delta = b2 - b1
+    total_delta = delta / (n - 1)
+    nth_day = b2 + total_delta
+    return nth_day.date()
+
+# Example usage:
+b1 = datetime.date(1990, 1, 1)
+b2 = datetime.date(1995, 1, 1)
+n = 3
+print(f"{b1} and {b2} - {n} times day is:", n_times_day(b1, b2, n))
