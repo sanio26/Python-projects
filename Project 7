@@ -1,0 +1,98 @@
+ Step-by-step Code:
+
+1. Define Point, Circle, and Rectangle classes
+
+import math
+
+class Point:
+    def _init_(self, x, y):
+        self.x = x
+        self.y = y
+
+class Circle:
+    def _init_(self, center, radius):
+        self.center = center  # Point object
+        self.radius = radius
+
+class Rectangle:
+    def _init_(self, corner, width, height):
+        self.corner = corner  # bottom-left corner as Point
+        self.width = width
+        self.height = height
+
+
+---
+
+2. Instantiate the Circle
+
+# Create a circle with center (150, 100) and radius 75
+circle = Circle(Point(150, 100), 75)
+
+
+---
+
+3. Function: point_in_circle(circle, point)
+
+def point_in_circle(circle, point):
+    dx = point.x - circle.center.x
+    dy = point.y - circle.center.y
+    distance = math.sqrt(dx*2 + dy*2)
+    return distance <= circle.radius
+
+
+---
+
+4. Function: rect_in_circle(circle, rect)
+
+def rect_in_circle(circle, rect):
+    # Get all 4 corners of the rectangle
+    corners = [
+        rect.corner,  # bottom-left
+        Point(rect.corner.x + rect.width, rect.corner.y),  # bottom-right
+        Point(rect.corner.x, rect.corner.y + rect.height),  # top-left
+        Point(rect.corner.x + rect.width, rect.corner.y + rect.height)  # top-right
+    ]
+
+    # All corners must be inside the circle
+    return all(point_in_circle(circle, corner) for corner in corners)
+
+
+---
+
+5. Function: rect_circle_overlap(circle, rect) (simple version: corner-based)
+
+def rect_circle_overlap(circle, rect):
+    corners = [
+        rect.corner,
+        Point(rect.corner.x + rect.width, rect.corner.y),
+        Point(rect.corner.x, rect.corner.y + rect.height),
+        Point(rect.corner.x + rect.width, rect.corner.y + rect.height)
+    ]
+    return any(point_in_circle(circle, corner) for corner in corners)
+
+
+---
+
+ Bonus: Advanced version of rect_circle_overlap (any part overlaps)
+
+def rect_circle_overlap_advanced(circle, rect):
+    # Step through a grid of points within the rectangle to check for overlap
+    step = 1  # smaller step = more precise, slower
+    x0, y0 = rect.corner.x, rect.corner.y
+    for x in range(int(x0), int(x0 + rect.width) + 1, step):
+        for y in range(int(y0), int(y0 + rect.height) + 1, step):
+            if point_in_circle(circle, Point(x, y)):
+                return True
+    return False
+
+
+---
+
+Example Usage
+
+rect = Rectangle(Point(120, 80), 40, 30)
+
+print(point_in_circle(circle, Point(150, 100)))  # True
+print(rect_in_circle(circle, rect))              # True or False depending on rect size
+print(rect_circle_overlap(circle, rect))         # True
+print(rect_circle_overlap_advanced(circle, rect))# More accurate check
