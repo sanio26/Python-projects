@@ -1,0 +1,46 @@
+Bugs in the orginal code:
+import random
+guess = '' 
+while guess not in ('heads', 'tails'):
+    print('Guess the coin toss! Enter heads or tails:')
+    guess = input()
+
+toss = random.randint(0, 1)  # 0 is tails, 1 is heads
+
+if toss == guess:  # ❌ Bug 1
+    print('You got it!')
+else:
+    print('Nope! Guess again!')
+    guesss = input()  # ❌ Bug 2
+    if toss == guess:  # ❌ Bug 3
+        print('You got it!')
+    else:
+        print('Nope. You are really bad at this game.')
+
+corrected code:
+import random
+
+# Get the user's first guess
+guess = ''
+while guess not in ('heads', 'tails'):
+    print('Guess the coin toss! Enter heads or tails:')
+    guess = input().lower()
+
+# Simulate the coin toss
+toss = random.randint(0, 1)  # 0 is tails, 1 is heads
+
+# Convert toss to string for comparison
+toss_result = 'heads' if toss == 1 else 'tails'
+
+# First attempt
+if toss_result == guess:
+    print('You got it!')
+else:
+    print('Nope! Guess again!')
+    guess = ''
+    while guess not in ('heads', 'tails'):
+        guess = input().lower()
+    if toss_result == guess:
+        print('You got it!')
+    else:
+        print('Nope. You are really bad at this game.')
