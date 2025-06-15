@@ -1,0 +1,23 @@
+import os
+
+def find_large_files(folder, size_limit_mb=100):
+    size_limit_bytes = size_limit_mb * 1024 * 1024  # Convert MB to bytes
+
+    print(f"Searching for files larger than {size_limit_mb}MB in '{folder}'...\n")
+
+    for foldername, subfolders, filenames in os.walk(folder):
+        for filename in filenames:
+            try:
+                filepath = os.path.join(foldername, filename)
+                filesize = os.path.getsize(filepath)
+                if filesize > size_limit_bytes:
+                    print(f"{os.path.abspath(filepath)} - {filesize / (1024 * 1024):.2f} MB")
+            except FileNotFoundError:
+                # Handle files that may have been removed during the scan or inaccessible
+                print(f"Could not access: {filepath}")
+            except PermissionError:
+                print(f"Permission denied: {filepath}")
+
+# Example usage:
+folder_to_scan = input("Enter the path of the folder to scan: ")
+find_large_files(folder_to_scan)
