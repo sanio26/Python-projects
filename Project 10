@@ -1,0 +1,53 @@
+
+
+class Time:
+    def _init_(self, hour=0, minute=0, second=0):
+        self.seconds = hour * 3600 + minute * 60 + second
+
+    def _str_(self):
+        hours = self.seconds // 3600
+        minutes = (self.seconds % 3600) // 60
+        seconds = self.seconds % 60
+        return f'{hours:02}:{minutes:02}:{seconds:02}'
+
+    def print_time(self):
+        print(str(self))
+
+    def is_after(self, other):
+        return self.seconds > other.seconds
+
+
+def add_time(t1, t2):
+    total = t1.seconds + t2.seconds
+    return int_to_time(total)
+
+
+def increment(t, seconds):
+    return int_to_time(t.seconds + seconds)
+
+
+def int_to_time(seconds):
+    return Time(0, 0, seconds)
+
+
+---
+
+🧪 Sample main() (from original Think Python)
+
+You don't need to change this, but here's what it would look like for context:
+
+def main():
+    start = Time(9, 45, 0)
+    duration = Time(1, 35, 0)
+    print("Start time:", start)
+    print("Duration:", duration)
+
+    done = add_time(start, duration)
+    print("End time:", done)
+
+    print("Increment by 70 seconds:", increment(start, 70))
+    print("Is done after start?", done.is_after(start))
+
+if _name_ == '_main_':
+    main()
+
