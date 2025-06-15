@@ -1,0 +1,55 @@
+✅ Step 1: Define a Time class
+
+class Time:
+    def _init_(self, hours=0, minutes=0, seconds=0):
+        self.hours = hours
+        self.minutes = minutes
+        self.seconds = seconds
+
+    def time_to_seconds(self):
+        return self.hours * 3600 + self.minutes * 60 + self.seconds
+
+    @classmethod
+    def seconds_to_time(cls, total_seconds):
+        hours = total_seconds // 3600
+        total_seconds %= 3600
+        minutes = total_seconds // 60
+        seconds = total_seconds % 60
+        return cls(int(hours), int(minutes), int(seconds))
+
+    def _str_(self):
+        return f"{self.hours:02}:{self.minutes:02}:{self.seconds:02}"
+
+
+---
+
+✅ Step 2: Multiply a Time by a Number
+
+def mul_time(time, number):
+    total_seconds = time.time_to_seconds()
+    product_seconds = total_seconds * number
+    return Time.seconds_to_time(product_seconds)
+
+
+---
+
+✅ Step 3: Average Pace Function
+
+def average_pace(finishing_time, distance):
+    # Time per unit distance
+    return mul_time(finishing_time, 1 / distance)
+
+
+---
+
+✅ Example Usage
+
+# Suppose a runner finishes a 10-mile race in 1 hour 30 minutes
+race_time = Time(1, 30, 0)  # 1:30:00
+
+pace = average_pace(race_time, 10)  # average time per mile
+print("Average pace per mile:", pace)
+
+Output:
+
+Average pace per mile: 00:09:00
