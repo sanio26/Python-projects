@@ -1,0 +1,47 @@
+part 1:close gaps in numbered files
+import os
+import re
+from pathlib import Path
+
+def close_gaps(folder, prefix):
+    folder = Path(folder)
+    files = list(folder.glob(f"{prefix}[0-9][0-9][0-9].txt"))
+    
+    # Sort files based on their number
+    numbered_files = sorted(files, key=lambda f: int(re.search(rf"{prefix}(\d+)\.txt", f.name).group(1)))
+    
+    expected_num = 1
+    for file in numbered_files:
+        current_num = int(re.search(rf"{prefix}(\d+)\.txt", file.name).group(1))
+        if current_num != expected_num:
+            new_name = f"{prefix}{expected_num:03}.txt"
+            new_path = folder / new_name
+            print(f"Renaming {file.name} → {new_name}")
+            file.rename(new_path)
+        expected_num += 1
+
+# Example usage
+close_gaps("path/to/folder", "spam")
+
+prt2:insert a gap
+import os
+import re
+from pathlib import Path
+
+def insert_gap(folder, prefix, gap_position):
+    folder = Path(folder)
+    files = list(folder.glob(f"{prefix}[0-9][0-9][0-9].txt"))
+
+    # Sort in descending order to avoid overwriting
+    numbered_files = sorted(files, key=lambda f: int(re.search(rf"{prefix}(\d+)\.txt", f.name).group(1)), reverse=True)
+
+    for file in numbered_files:
+        current_num = int(re.search(rf"{prefix}(\d+)\.txt", file.name).group(1))
+        if current_num >= gap_position:
+            new_name = f"{prefix}{current_num + 1:03}.txt"
+            new_path = folder / new_name
+            print(f"Renaming {file.name} → {new_name}")
+            file.rename(new_path)
+
+# Example usage
+insert_gap("path/to/folder", "spam", 2)  # This creates a gap at spam002.txt
