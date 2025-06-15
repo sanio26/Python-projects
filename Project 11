@@ -1,0 +1,35 @@
+
+
+class Kangaroo:
+    def _init_(self):
+        # Each instance gets its own list
+        self.pouch_contents = []
+
+    def put_in_pouch(self, item):
+        self.pouch_contents.append(item)
+
+    def _str_(self):
+        contents = ', '.join(str(item) for item in self.pouch_contents)
+        return f'Kangaroo with pouch contents: [{contents}]'
+
+
+---
+
+🧪 Test the Class
+
+def main():
+    kanga = Kangaroo()
+    roo = Kangaroo()
+    
+    # Add roo (object) to kanga's pouch
+    kanga.put_in_pouch(roo)
+
+    print("Kanga:", kanga)
+    print("Roo:", roo)
+
+main()
+
+
+
+
+Would you like to extend this example with kangaroo names, pouch capacity, or nesting levels?
