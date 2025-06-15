@@ -1,0 +1,28 @@
+import os
+import re
+
+def search_files_in_folder(folder_path, user_pattern):
+    # Compile the regex pattern
+    try:
+        regex = re.compile(user_pattern)
+    except re.error:
+        print("Invalid regular expression.")
+        return
+
+    # Loop through all .txt files
+    for filename in os.listdir(folder_path):
+        if filename.endswith(".txt"):
+            file_path = os.path.join(folder_path, filename)
+            try:
+                with open(file_path, 'r', encoding='utf-8') as file:
+                    for line_num, line in enumerate(file, start=1):
+                        if regex.search(line):
+                            print(f"{filename} (Line {line_num}): {line.strip()}")
+            except Exception as e:
+                print(f"Error reading file {filename}: {e}")
+
+# --- Main execution ---
+folder = input("Enter the folder path: ")
+pattern = input("Enter a regular expression to search for: ")
+
+search_files_in_folder(folder, pattern)
