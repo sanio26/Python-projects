@@ -1,0 +1,34 @@
+import os
+import shutil
+
+def copy_files_by_extension(source_folder, target_folder, extension):
+    # Normalize the extension (e.g., ".PDF" → ".pdf")
+    extension = extension.lower()
+
+    # Create target folder if it doesn't exist
+    os.makedirs(target_folder, exist_ok=True)
+
+    # Walk through the folder tree
+    for foldername, subfolders, filenames in os.walk(source_folder):
+        for filename in filenames:
+            if filename.lower().endswith(extension):
+                source_path = os.path.join(foldername, filename)
+                target_path = os.path.join(target_folder, filename)
+
+                # Handle duplicate filenames
+                base, ext = os.path.splitext(filename)
+                counter = 1
+                while os.path.exists(target_path):
+                    target_path = os.path.join(target_folder, f"{base}_{counter}{ext}")
+                    counter += 1
+
+                # Copy file
+                shutil.copy2(source_path, target_path)
+                print(f"Copied: {source_path} → {target_path}")
+
+# --- Main execution ---
+source = input("Enter the source folder path: ")
+target = input("Enter the destination folder path: ")
+ext = input("Enter the file extension to search for (e.g., .pdf, .jpg): ")
+
+copy_files_by_extension(source, target, ext)
